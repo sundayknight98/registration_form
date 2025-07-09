@@ -2,99 +2,99 @@ import 'package:flutter/material.dart';
 import '../widgets/navigation_buttons.dart';
 
 class ReviewTab extends StatelessWidget {
-  final TextEditingController firstNameController;
-  final TextEditingController lastNameController;
-  final TextEditingController birthdateController;
-  final TextEditingController ageController;
-  final TextEditingController bioController;
-  final TextEditingController emailController;
   final VoidCallback onBack;
   final VoidCallback onSubmit;
+  final String firstName;
+  final String lastName;
+  final String birthdate;
+  final String age;
+  final String bio;
+  final String email;
 
   const ReviewTab({
     super.key,
-    required this.firstNameController,
-    required this.lastNameController,
-    required this.birthdateController,
-    required this.ageController,
-    required this.bioController,
-    required this.emailController,
     required this.onBack,
     required this.onSubmit,
+    required this.firstName,
+    required this.lastName,
+    required this.birthdate,
+    required this.age,
+    required this.bio,
+    required this.email,
   });
 
-  Widget _buildInfo(String label, String value) {
-    return Padding(
-      padding: const EdgeInsets.only(bottom: 8.0),
-      child: RichText(
-        text: TextSpan(
-          text: "$label: ",
+  Widget _buildReviewItem(String label, String value) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Text(
+          label,
           style: const TextStyle(
-            color: Colors.black,
             fontWeight: FontWeight.bold,
+            fontSize: 14,
+            color: Colors.grey,
           ),
-          children: [
-            TextSpan(
-              text: value,
-              style: const TextStyle(fontWeight: FontWeight.normal),
-            ),
-          ],
         ),
-      ),
+        const SizedBox(height: 4),
+        Container(
+          width: double.infinity,
+          padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 14),
+          decoration: BoxDecoration(
+            color: Colors.grey.shade100,
+            borderRadius: BorderRadius.circular(12),
+            border: Border.all(color: Colors.grey.shade300),
+          ),
+          child: Text(value, style: const TextStyle(fontSize: 15)),
+        ),
+        const SizedBox(height: 16),
+      ],
     );
   }
 
   @override
   Widget build(BuildContext context) {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.stretch,
-      children: [
-        const Text('3 out of 3', textAlign: TextAlign.center),
-        const SizedBox(height: 12),
-        const Text(
-          'Review Information',
-          style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
-          textAlign: TextAlign.center,
-        ),
-        const SizedBox(height: 24),
-        _buildInfo('First Name', firstNameController.text),
-        _buildInfo('Last Name', lastNameController.text),
-        _buildInfo('Birthdate', birthdateController.text),
-        _buildInfo('Age', ageController.text),
-        _buildInfo('Email', emailController.text),
-        const SizedBox(height: 8),
-        RichText(
-          text: TextSpan(
-            text: 'Bio – Describe yourself: ',
-            style: const TextStyle(
-              color: Colors.black,
-              fontWeight: FontWeight.bold,
-            ),
-            children: [
-              TextSpan(
-                text: bioController.text,
-                style: const TextStyle(fontWeight: FontWeight.normal),
-              ),
-            ],
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 24.0, vertical: 16.0),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          const Text(
+            '3 out of 3',
+            style: TextStyle(fontSize: 14, color: Colors.grey),
           ),
-        ),
-        const SizedBox(height: 24),
-        Row(
-          children: [
-            Expanded(
-              child: NavigationButton(label: 'Back', onPressed: onBack),
-            ),
-            const SizedBox(width: 12),
-            Expanded(
-              child: NavigationButton(
-                label: 'Continue',
-                onPressed: onSubmit,
-                isPrimary: true,
+          const SizedBox(height: 8),
+          const Text(
+            'Review Details',
+            style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+          ),
+          const SizedBox(height: 4),
+          const Text(
+            'Please double-check your entries.',
+            style: TextStyle(fontSize: 13, color: Colors.grey),
+          ),
+          const SizedBox(height: 24),
+          Expanded(
+            child: SingleChildScrollView(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  _buildReviewItem('First Name', firstName),
+                  _buildReviewItem('Last Name', lastName),
+                  _buildReviewItem('Birthdate', birthdate),
+                  _buildReviewItem('Age', age),
+                  _buildReviewItem('Short Bio', bio),
+                  _buildReviewItem('Email', email),
+                ],
               ),
             ),
-          ],
-        ),
-      ],
+          ),
+          NavigationButtons(
+            onBack: onBack,
+            onNext: onSubmit,
+            nextLabel: 'Submit',
+          ),
+        ],
+      ),
     );
   }
 }

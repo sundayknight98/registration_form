@@ -1,23 +1,7 @@
 import 'package:flutter/material.dart';
-import 'screens/personal_info_tab.dart';
-import 'screens/credentials_tab.dart';
-import 'screens/review_tab.dart';
-
-void main() {
-  runApp(const MyApp());
-}
-
-class MyApp extends StatelessWidget {
-  const MyApp({super.key});
-
-  @override
-  Widget build(BuildContext context) {
-    return MaterialApp(
-      debugShowCheckedModeBanner: false,
-      home: const RegistrationForm(),
-    );
-  }
-}
+import 'credentials_tab.dart';
+import 'personal_info_tab.dart';
+import 'review_tab.dart';
 
 class RegistrationForm extends StatefulWidget {
   const RegistrationForm({super.key});
@@ -30,16 +14,16 @@ class _RegistrationFormState extends State<RegistrationForm>
     with SingleTickerProviderStateMixin {
   late final TabController _tabController;
 
-  final firstNameController = TextEditingController();
-  final lastNameController = TextEditingController();
-  final birthdateController = TextEditingController();
-  final ageController = TextEditingController();
-  final bioController = TextEditingController();
-  final emailController = TextEditingController();
-  final passwordController = TextEditingController();
-  final confirmPasswordController = TextEditingController();
-
-  final formKeys = [GlobalKey<FormState>(), GlobalKey<FormState>()];
+  // Controllers for all form fields
+  final TextEditingController firstNameController = TextEditingController();
+  final TextEditingController lastNameController = TextEditingController();
+  final TextEditingController birthdateController = TextEditingController();
+  final TextEditingController ageController = TextEditingController();
+  final TextEditingController bioController = TextEditingController();
+  final TextEditingController emailController = TextEditingController();
+  final TextEditingController passwordController = TextEditingController();
+  final TextEditingController confirmPasswordController =
+      TextEditingController();
 
   @override
   void initState() {
@@ -48,96 +32,29 @@ class _RegistrationFormState extends State<RegistrationForm>
   }
 
   void nextTab() {
-    if (_tabController.index == 0 && formKeys[0].currentState!.validate()) {
-      _tabController.animateTo(1);
-    } else if (_tabController.index == 1 &&
-        formKeys[1].currentState!.validate()) {
-      if (!emailController.text.endsWith('@gmail.com')) {
-        ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(content: Text("Email must end with @gmail.com")),
-        );
-        return;
-      }
-      _tabController.animateTo(2);
+    if (_tabController.index < 2) {
+      _tabController.animateTo(_tabController.index + 1);
     }
   }
 
-  void previousTab() => _tabController.animateTo(_tabController.index - 1);
+  void previousTab() {
+    if (_tabController.index > 0) {
+      _tabController.animateTo(_tabController.index - 1);
+    }
+  }
 
-  void submitData() {
-    final data = {
-      'firstName': firstNameController.text,
-      'lastName': lastNameController.text,
-      'birthdate': birthdateController.text,
-      'age': ageController.text,
-      'bio': bioController.text,
-      'email': emailController.text,
-    };
+  void handleSubmit() {
     showDialog(
       context: context,
       builder: (_) => AlertDialog(
-        title: const Text("Submitted Data"),
-        content: Text(data.toString()),
-      ),
-    );
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: const Color(0xFFEAF7FF),
-      body: SafeArea(
-        child: Center(
-          child: Container(
-            width: 360,
-            margin: const EdgeInsets.symmetric(vertical: 24),
-            padding: const EdgeInsets.all(24),
-            decoration: BoxDecoration(
-              color: Colors.white,
-              borderRadius: BorderRadius.circular(24),
-              boxShadow: [
-                BoxShadow(
-                  color: Colors.black.withOpacity(0.05),
-                  blurRadius: 10,
-                  offset: const Offset(0, 4),
-                ),
-              ],
-            ),
-            child: TabBarView(
-              controller: _tabController,
-              physics: const NeverScrollableScrollPhysics(),
-              children: [
-                PersonalTab(
-                  firstNameController: firstNameController,
-                  lastNameController: lastNameController,
-                  birthdateController: birthdateController,
-                  ageController: ageController,
-                  bioController: bioController,
-                  onNext: nextTab,
-                  formKey: formKeys[0],
-                ),
-                CredentialsTab(
-                  emailController: emailController,
-                  passwordController: passwordController,
-                  confirmPasswordController: confirmPasswordController,
-                  onBack: previousTab,
-                  onNext: nextTab,
-                  formKey: formKeys[1],
-                ),
-                ReviewTab(
-                  firstNameController: firstNameController,
-                  lastNameController: lastNameController,
-                  birthdateController: birthdateController,
-                  ageController: ageController,
-                  bioController: bioController,
-                  emailController: emailController,
-                  onBack: previousTab,
-                  onSubmit: submitData,
-                ),
-              ],
-            ),
+        title: const Text("Form Submitted"),
+        content: Text("Thank you, ${firstNameController.text}!"),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.of(context).pop(),
+            child: const Text("OK"),
           ),
-        ),
+        ],
       ),
     );
   }
@@ -145,6 +62,54 @@ class _RegistrationFormState extends State<RegistrationForm>
   @override
   void dispose() {
     _tabController.dispose();
+    firstNameController.dispose();
+    lastNameController.dispose();
+    birthdateController.dispose();
+    ageController.dispose();
+    bioController.dispose();
+    emailController.dispose();
+    passwordController.dispose();
+    confirmPasswordController.dispose();
     super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      backgroundColor: Colors.white,
+      body: SafeArea(
+        child: TabBarView(
+          controller: _tabController,
+          physics: const NeverScrollableScrollPhysics(),
+          children: [
+            PersonalInfoTab(
+              firstNameController: firstNameController,
+              lastNameController: lastNameController,
+              birthdateController: birthdateController,
+              ageController: ageController,
+              bioController: bioController,
+              onNext: nextTab,
+            ),
+            CredentialsTab(
+              emailController: emailController,
+              passwordController: passwordController,
+              confirmPasswordController: confirmPasswordController,
+              onBack: previousTab,
+              onNext: nextTab,
+            ),
+            ReviewTab(
+              onBack: previousTab,
+              onSubmit: handleSubmit,
+              firstName: firstNameController.text,
+              lastName: lastNameController.text,
+              birthdate: birthdateController.text,
+              age: ageController.text,
+              bio: bioController.text,
+              email: emailController.text,
+            ),
+          ],
+        ),
+      ),
+    );
   }
 }

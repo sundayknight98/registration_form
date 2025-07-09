@@ -1,17 +1,16 @@
 import 'package:flutter/material.dart';
 import 'screens/registration_form.dart';
 
-void main() {
-  runApp(const MyApp());
-}
+void main() => runApp(const MyApp());
 
 class MyApp extends StatelessWidget {
   const MyApp({super.key});
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
+    return const MaterialApp(
       debugShowCheckedModeBanner: false,
+      title: 'Registration',
       home: RegistrationForm(),
     );
   }

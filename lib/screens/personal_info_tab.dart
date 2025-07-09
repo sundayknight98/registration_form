@@ -2,16 +2,15 @@ import 'package:flutter/material.dart';
 import '../widgets/form_input.dart';
 import '../widgets/navigation_buttons.dart';
 
-class PersonalTab extends StatelessWidget {
+class PersonalInfoTab extends StatelessWidget {
   final TextEditingController firstNameController;
   final TextEditingController lastNameController;
   final TextEditingController birthdateController;
   final TextEditingController ageController;
   final TextEditingController bioController;
   final VoidCallback onNext;
-  final GlobalKey<FormState> formKey;
 
-  const PersonalTab({
+  const PersonalInfoTab({
     super.key,
     required this.firstNameController,
     required this.lastNameController,
@@ -19,78 +18,72 @@ class PersonalTab extends StatelessWidget {
     required this.ageController,
     required this.bioController,
     required this.onNext,
-    required this.formKey,
   });
 
   @override
   Widget build(BuildContext context) {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.stretch,
-      children: [
-        const Text('1 out of 3', textAlign: TextAlign.center),
-        const SizedBox(height: 12),
-        const Text(
-          'Personal Information',
-          style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
-          textAlign: TextAlign.center,
-        ),
-        const SizedBox(height: 24),
-        Form(
-          key: formKey,
-          child: Column(
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 24.0, vertical: 16.0),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          const Text(
+            '1 out of 3',
+            style: TextStyle(fontSize: 14, color: Colors.grey),
+          ),
+          const SizedBox(height: 8),
+          const Text(
+            'Personal Information',
+            style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+          ),
+          const SizedBox(height: 4),
+          const Text(
+            'Input your personal information. All fields are required.',
+            style: TextStyle(fontSize: 13, color: Colors.grey),
+          ),
+          const SizedBox(height: 24),
+
+          FormInput(label: 'First Name', controller: firstNameController),
+          const SizedBox(height: 16),
+          FormInput(label: 'Last Name', controller: lastNameController),
+          const SizedBox(height: 16),
+
+          Row(
             children: [
-              FormFieldWidget(
-                controller: firstNameController,
-                hint: 'First Name',
-                validator: (val) => val!.isEmpty ? 'Required' : null,
+              Expanded(
+                flex: 2,
+                child: FormInput(
+                  label: 'Birthdate',
+                  controller: birthdateController,
+                  hintText: 'mm/dd/yyyy',
+                  keyboardType: TextInputType.datetime,
+                ),
               ),
-              const SizedBox(height: 12),
-              FormFieldWidget(
-                controller: lastNameController,
-                hint: 'Last Name',
-                validator: (val) => val!.isEmpty ? 'Required' : null,
-              ),
-              const SizedBox(height: 12),
-              Row(
-                children: [
-                  Expanded(
-                    flex: 2,
-                    child: FormFieldWidget(
-                      controller: birthdateController,
-                      hint: 'mm/dd/yyyy',
-                      keyboardType: TextInputType.datetime,
-                      validator: (val) => val!.isEmpty ? 'Required' : null,
-                    ),
-                  ),
-                  const SizedBox(width: 12),
-                  Expanded(
-                    flex: 1,
-                    child: FormFieldWidget(
-                      controller: ageController,
-                      hint: 'Age',
-                      keyboardType: TextInputType.number,
-                      validator: (val) => val!.isEmpty ? 'Required' : null,
-                    ),
-                  ),
-                ],
-              ),
-              const SizedBox(height: 12),
-              FormFieldWidget(
-                controller: bioController,
-                hint: 'Bio – Describe yourself',
-                maxLines: 4,
-                validator: (val) => val!.isEmpty ? 'Required' : null,
-              ),
-              const SizedBox(height: 24),
-              NavigationButton(
-                label: 'Next',
-                onPressed: onNext,
-                isPrimary: true,
+              const SizedBox(width: 16),
+              Expanded(
+                child: FormInput(
+                  label: 'Age',
+                  controller: ageController,
+                  keyboardType: TextInputType.number,
+                ),
               ),
             ],
           ),
-        ),
-      ],
+          const SizedBox(height: 16),
+
+          FormInput(
+            label: 'Bio – Describe yourself',
+            controller: bioController,
+            maxLines: 5,
+          ),
+          const SizedBox(height: 32),
+
+          Align(
+            alignment: Alignment.centerRight,
+            child: NavigationButtons(showBack: false, onNext: onNext),
+          ),
+        ],
+      ),
     );
   }
 }

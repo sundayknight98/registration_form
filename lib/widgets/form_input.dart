@@ -1,43 +1,55 @@
 import 'package:flutter/material.dart';
 
-class FormFieldWidget extends StatelessWidget {
+class FormInput extends StatelessWidget {
+  final String label;
   final TextEditingController controller;
-  final String hint;
+  final bool isPassword;
   final TextInputType keyboardType;
-  final bool obscureText;
-  final int maxLines;
-  final String? Function(String?)? validator;
-  final Widget? suffixIcon;
+  final FormFieldValidator<String>? validator;
+  final String? hintText;
+  final int? maxLines;
+  final Widget? suffixIcon; // 👈 Add this
 
-  const FormFieldWidget({
+  const FormInput({
     super.key,
+    required this.label,
     required this.controller,
-    required this.hint,
+    this.isPassword = false,
     this.keyboardType = TextInputType.text,
-    this.obscureText = false,
-    this.maxLines = 1,
     this.validator,
-    this.suffixIcon,
+    this.hintText,
+    this.maxLines = 1,
+    this.suffixIcon, // 👈 Add this
   });
 
   @override
   Widget build(BuildContext context) {
-    return TextFormField(
-      controller: controller,
-      keyboardType: keyboardType,
-      obscureText: obscureText,
-      maxLines: maxLines,
-      validator: validator,
-      decoration: InputDecoration(
-        filled: true,
-        fillColor: Colors.grey[200],
-        hintText: hint,
-        suffixIcon: suffixIcon,
-        border: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(12),
-          borderSide: BorderSide.none,
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Text(
+          label,
+          style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 14),
         ),
-      ),
+        const SizedBox(height: 8),
+        TextFormField(
+          controller: controller,
+          obscureText: isPassword,
+          keyboardType: keyboardType,
+          validator: validator,
+          maxLines: maxLines,
+          decoration: InputDecoration(
+            hintText: hintText,
+            suffixIcon: suffixIcon, // 👈 Add this
+            contentPadding: const EdgeInsets.symmetric(
+              horizontal: 16,
+              vertical: 12,
+            ),
+            border: OutlineInputBorder(borderRadius: BorderRadius.circular(12)),
+          ),
+        ),
+        const SizedBox(height: 16),
+      ],
     );
   }
 }
