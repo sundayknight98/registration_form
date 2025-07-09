@@ -1,21 +1,21 @@
 import 'package:flutter/material.dart';
-import '../widgets/form_input.dart';
-import '../widgets/navigation_buttons.dart';
 
 class CredentialsTab extends StatefulWidget {
+  final GlobalKey<FormState> formKey;
   final TextEditingController emailController;
   final TextEditingController passwordController;
   final TextEditingController confirmPasswordController;
-  final VoidCallback onBack;
   final VoidCallback onNext;
+  final VoidCallback onBack;
 
   const CredentialsTab({
     super.key,
+    required this.formKey,
     required this.emailController,
     required this.passwordController,
     required this.confirmPasswordController,
-    required this.onBack,
     required this.onNext,
+    required this.onBack,
   });
 
   @override
@@ -25,95 +25,120 @@ class CredentialsTab extends StatefulWidget {
 class _CredentialsTabState extends State<CredentialsTab> {
   bool _obscurePassword = true;
   bool _obscureConfirmPassword = true;
-  final _formKey = GlobalKey<FormState>();
 
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 24.0, vertical: 16.0),
+      padding: const EdgeInsets.all(20),
       child: Form(
-        key: _formKey,
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
+        key: widget.formKey,
+        child: ListView(
           children: [
-            const Text(
-              '2 out of 3',
-              style: TextStyle(fontSize: 14, color: Colors.grey),
-            ),
-            const SizedBox(height: 8),
-            const Text(
-              'Email & Password',
-              style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
-            ),
-            const SizedBox(height: 4),
-            const Text(
-              'Login information.',
-              style: TextStyle(fontSize: 13, color: Colors.grey),
-            ),
-            const SizedBox(height: 24),
-            FormInput(
-              label: 'Email Address',
+            const SizedBox(height: 20),
+            TextFormField(
               controller: widget.emailController,
+              decoration: InputDecoration(
+                labelText: 'Email Address',
+                hintText: 'example@gmail.com',
+                border: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(12),
+                ),
+              ),
               keyboardType: TextInputType.emailAddress,
+              validator: (value) => value == null || value.isEmpty
+                  ? 'Please enter your email'
+                  : null,
+            ),
+            const SizedBox(height: 12),
+            TextFormField(
+              controller: widget.passwordController,
+              obscureText: _obscurePassword,
+              decoration: InputDecoration(
+                labelText: 'Password',
+                hintText: '********',
+                border: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(12),
+                ),
+                suffixIcon: IconButton(
+                  icon: Icon(
+                    _obscurePassword ? Icons.visibility_off : Icons.visibility,
+                  ),
+                  onPressed: () {
+                    setState(() {
+                      _obscurePassword = !_obscurePassword;
+                    });
+                  },
+                ),
+              ),
+              validator: (value) => value == null || value.isEmpty
+                  ? 'Please enter your password'
+                  : null,
+            ),
+            const SizedBox(height: 12),
+            TextFormField(
+              controller: widget.confirmPasswordController,
+              obscureText: _obscureConfirmPassword,
+              decoration: InputDecoration(
+                labelText: 'Confirm Password',
+                hintText: '********',
+                border: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(12),
+                ),
+                suffixIcon: IconButton(
+                  icon: Icon(
+                    _obscureConfirmPassword
+                        ? Icons.visibility_off
+                        : Icons.visibility,
+                  ),
+                  onPressed: () {
+                    setState(() {
+                      _obscureConfirmPassword = !_obscureConfirmPassword;
+                    });
+                  },
+                ),
+              ),
               validator: (value) {
                 if (value == null || value.isEmpty) {
-                  return 'Please enter your email';
+                  return 'Please confirm your password';
                 }
-                if (!value.contains('@gmail.com')) {
-                  return 'Must be a valid Gmail address';
-                }
-                return null;
-              },
-            ),
-            const SizedBox(height: 16),
-            FormInput(
-              label: 'Password',
-              controller: widget.passwordController,
-              isPassword: true,
-              suffixIcon: IconButton(
-                icon: Icon(
-                  _obscurePassword ? Icons.visibility_off : Icons.visibility,
-                ),
-                onPressed: () {
-                  setState(() {
-                    _obscurePassword = !_obscurePassword;
-                  });
-                },
-              ),
-            ),
-            const SizedBox(height: 16),
-            FormInput(
-              label: 'Confirm Password',
-              controller: widget.confirmPasswordController,
-              isPassword: true,
-              suffixIcon: IconButton(
-                icon: Icon(
-                  _obscureConfirmPassword
-                      ? Icons.visibility_off
-                      : Icons.visibility,
-                ),
-                onPressed: () {
-                  setState(() {
-                    _obscureConfirmPassword = !_obscureConfirmPassword;
-                  });
-                },
-              ),
-              validator: (value) {
                 if (value != widget.passwordController.text) {
                   return 'Passwords do not match';
                 }
                 return null;
               },
             ),
-            const Spacer(),
-            NavigationButtons(
-              onBack: widget.onBack,
-              onNext: () {
-                if (_formKey.currentState!.validate()) {
-                  widget.onNext();
-                }
-              },
-              nextLabel: 'Review',
+            const SizedBox(height: 20),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Expanded(
+                  child: ElevatedButton(
+                    onPressed: widget.onBack,
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: Colors.grey.shade300,
+                      foregroundColor: Colors.black,
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(12),
+                      ),
+                    ),
+                    child: const Text('Back'),
+                  ),
+                ),
+                const SizedBox(width: 10),
+                Expanded(
+                  child: ElevatedButton(
+                    onPressed: widget.onNext,
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: Colors.blue,
+                      foregroundColor: Colors.white,
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(12),
+                      ),
+                    ),
+                    child: const Text('Next'),
+                  ),
+                ),
+              ],
             ),
           ],
         ),

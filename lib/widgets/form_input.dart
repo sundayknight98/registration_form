@@ -3,23 +3,23 @@ import 'package:flutter/material.dart';
 class FormInput extends StatelessWidget {
   final String label;
   final TextEditingController controller;
-  final bool isPassword;
-  final TextInputType keyboardType;
-  final FormFieldValidator<String>? validator;
+  final String? Function(String?)? validator;
+  final int maxLines;
   final String? hintText;
-  final int? maxLines;
-  final Widget? suffixIcon; // 👈 Add this
+  final TextInputType? keyboardType;
+  final bool readOnly;
+  final VoidCallback? onTap;
 
   const FormInput({
     super.key,
     required this.label,
     required this.controller,
-    this.isPassword = false,
-    this.keyboardType = TextInputType.text,
     this.validator,
-    this.hintText,
     this.maxLines = 1,
-    this.suffixIcon, // 👈 Add this
+    this.hintText,
+    this.keyboardType,
+    this.readOnly = false,
+    this.onTap,
   });
 
   @override
@@ -31,24 +31,25 @@ class FormInput extends StatelessWidget {
           label,
           style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 14),
         ),
-        const SizedBox(height: 8),
+        const SizedBox(height: 6),
         TextFormField(
           controller: controller,
-          obscureText: isPassword,
-          keyboardType: keyboardType,
           validator: validator,
           maxLines: maxLines,
+          keyboardType: keyboardType,
+          readOnly: readOnly,
+          onTap: onTap,
           decoration: InputDecoration(
             hintText: hintText,
-            suffixIcon: suffixIcon, // 👈 Add this
             contentPadding: const EdgeInsets.symmetric(
-              horizontal: 16,
-              vertical: 12,
+              vertical: 16.0,
+              horizontal: 12.0,
             ),
-            border: OutlineInputBorder(borderRadius: BorderRadius.circular(12)),
+            border: OutlineInputBorder(
+              borderRadius: BorderRadius.circular(12.0),
+            ),
           ),
         ),
-        const SizedBox(height: 16),
       ],
     );
   }
