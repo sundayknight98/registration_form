@@ -67,9 +67,17 @@ class _CredentialsTabState extends State<CredentialsTab> {
                     ),
                   ),
                   keyboardType: TextInputType.emailAddress,
-                  validator: (value) => value == null || value.isEmpty
-                      ? 'Please enter your email'
-                      : null,
+                  validator: (value) {
+                    if (value == null || value.isEmpty) {
+                      return 'Please enter your email';
+                    }
+
+                    if (!value.endsWith('@gmail.com')) {
+                      return 'This is not a valid Gmail address';
+                    }
+
+                    return null;
+                  },
                 ),
               ],
             ),
@@ -108,9 +116,36 @@ class _CredentialsTabState extends State<CredentialsTab> {
                       },
                     ),
                   ),
-                  validator: (value) => value == null || value.isEmpty
-                      ? 'Please enter your password'
-                      : null,
+                  validator: (value) {
+                    if (value == null || value.isEmpty) {
+                      return 'Please enter your password';
+                    }
+
+                    final password = value.trim();
+                    List<String> errors = [];
+
+                    if (password.length < 8) {
+                      errors.add('• At least 8 characters');
+                    }
+                    if (!RegExp(r'[A-Z]').hasMatch(password)) {
+                      errors.add('• At least one uppercase letter');
+                    }
+                    if (!RegExp(r'[a-z]').hasMatch(password)) {
+                      errors.add('• At least one lowercase letter');
+                    }
+                    if (!RegExp(r'[0-9]').hasMatch(password)) {
+                      errors.add('• At least one number');
+                    }
+                    if (!RegExp(r'[!@#$%^&*(),.?":{}|<>]').hasMatch(password)) {
+                      errors.add('• At least one special character');
+                    }
+
+                    if (errors.isNotEmpty) {
+                      return 'Password must have:\n${errors.join('\n')}';
+                    }
+
+                    return null;
+                  },
                 ),
               ],
             ),
