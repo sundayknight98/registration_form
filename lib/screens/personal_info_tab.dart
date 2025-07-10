@@ -24,108 +24,172 @@ class PersonalInfoTab extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: const EdgeInsets.all(20),
+      padding: const EdgeInsets.only(left: 40, right: 40, top: 10, bottom: 40),
       child: Form(
         key: formKey,
         child: ListView(
           children: [
             const SizedBox(height: 10),
-            const Center(
-              child: Text(
-                '1 out of 3',
-                style: TextStyle(color: Colors.grey, fontSize: 13),
-              ),
+            const Text(
+              'Personal Information',
+              style: TextStyle(fontWeight: FontWeight.bold, fontSize: 22),
             ),
-            const SizedBox(height: 8),
-            const Center(
-              child: Text(
-                'Personal Information',
-                style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20),
-              ),
-            ),
-            const SizedBox(height: 4),
-            const Center(
-              child: Text(
-                'Input your personal information. All fields are required.',
-                textAlign: TextAlign.center,
-                style: TextStyle(color: Colors.grey, fontSize: 12),
+            const Text(
+              'Input your personal information. All fields are required.',
+              style: TextStyle(
+                color: Color.fromARGB(255, 163, 160, 160),
+                fontSize: 14,
               ),
             ),
             const SizedBox(height: 20),
-            TextFormField(
-              controller: firstNameController,
-              decoration: InputDecoration(
-                labelText: 'First Name',
-                hintText: 'Enter first name',
-                border: OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(12),
+
+            // First Name
+            Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                const Text(
+                  'First Name',
+                  style: TextStyle(fontWeight: FontWeight.w700, fontSize: 15),
                 ),
-              ),
-              validator: (value) =>
-                  value == null || value.isEmpty ? 'Required' : null,
+                const SizedBox(height: 6),
+                TextFormField(
+                  controller: firstNameController,
+                  decoration: InputDecoration(
+                    hintText: 'Enter first name',
+                    filled: true,
+                    fillColor: Color.fromARGB(255, 233, 229, 229),
+                    border: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(12),
+                      borderSide: BorderSide.none,
+                    ),
+                  ),
+                  validator: (value) =>
+                      value == null || value.isEmpty ? 'Required' : null,
+                ),
+              ],
             ),
             const SizedBox(height: 12),
-            TextFormField(
-              controller: lastNameController,
-              decoration: InputDecoration(
-                labelText: 'Last Name',
-                hintText: 'Enter last name',
-                border: OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(12),
+
+            // Last Name
+            Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                const Text(
+                  'Last Name',
+                  style: TextStyle(fontWeight: FontWeight.w700, fontSize: 15),
                 ),
-              ),
-              validator: (value) =>
-                  value == null || value.isEmpty ? 'Required' : null,
+                const SizedBox(height: 6),
+                TextFormField(
+                  controller: lastNameController,
+                  decoration: InputDecoration(
+                    hintText: 'Enter last name',
+                    filled: true,
+                    fillColor: Color.fromARGB(255, 233, 229, 229),
+                    border: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(12),
+                      borderSide: BorderSide.none,
+                    ),
+                  ),
+                  validator: (value) =>
+                      value == null || value.isEmpty ? 'Required' : null,
+                ),
+              ],
             ),
             const SizedBox(height: 12),
+
+            // Birthdate and Age
             Row(
               children: [
                 Expanded(
                   flex: 2,
-                  child: TextFormField(
-                    controller: birthdateController,
-                    decoration: InputDecoration(
-                      labelText: 'Birthdate',
-                      hintText: 'mm/dd/yyyy',
-                      border: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(12),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      const Text(
+                        'Birthdate',
+                        style: TextStyle(
+                          fontWeight: FontWeight.w700,
+                          fontSize: 15,
+                        ),
                       ),
-                    ),
-                    validator: (value) =>
-                        value == null || value.isEmpty ? 'Required' : null,
+                      const SizedBox(height: 6),
+                      TextFormField(
+                        controller: birthdateController,
+                        decoration: InputDecoration(
+                          hintText: 'mm/dd/yyyy',
+                          filled: true,
+                          fillColor: Color.fromARGB(255, 233, 229, 229),
+                          border: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(12),
+                            borderSide: BorderSide.none,
+                          ),
+                        ),
+                        validator: (value) =>
+                            value == null || value.isEmpty ? 'Required' : null,
+                      ),
+                    ],
                   ),
                 ),
                 const SizedBox(width: 10),
                 Expanded(
-                  child: TextFormField(
-                    controller: ageController,
-                    decoration: InputDecoration(
-                      labelText: 'Age',
-                      hintText: '00',
-                      border: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(12),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      const Text(
+                        'Age',
+                        style: TextStyle(
+                          fontWeight: FontWeight.w700,
+                          fontSize: 15,
+                        ),
                       ),
-                    ),
-                    keyboardType: TextInputType.number,
-                    validator: (value) =>
-                        value == null || value.isEmpty ? 'Required' : null,
+                      const SizedBox(height: 6),
+                      TextFormField(
+                        controller: ageController,
+                        keyboardType: TextInputType.number,
+                        decoration: InputDecoration(
+                          hintText: '00',
+                          filled: true,
+                          fillColor: Color.fromARGB(255, 233, 229, 229),
+                          border: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(12),
+                            borderSide: BorderSide.none,
+                          ),
+                        ),
+                        validator: (value) =>
+                            value == null || value.isEmpty ? 'Required' : null,
+                      ),
+                    ],
                   ),
                 ),
               ],
             ),
             const SizedBox(height: 12),
-            TextFormField(
-              controller: bioController,
-              decoration: InputDecoration(
-                labelText: 'Bio – Describe yourself',
-                hintText: 'Tell us something about yourself...',
-                border: OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(12),
+
+            // Bio
+            Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                const Text(
+                  'Bio – Describe yourself',
+                  style: TextStyle(fontWeight: FontWeight.w700, fontSize: 15),
                 ),
-              ),
-              maxLines: 3,
-              validator: (value) =>
-                  value == null || value.isEmpty ? 'Required' : null,
+                const SizedBox(height: 6),
+                TextFormField(
+                  controller: bioController,
+                  maxLines: 3,
+                  decoration: InputDecoration(
+                    hintText: 'Tell us something about yourself...',
+                    filled: true,
+                    fillColor: Color.fromARGB(255, 233, 229, 229),
+                    border: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(12),
+                      borderSide: BorderSide.none,
+                    ),
+                  ),
+                  validator: (value) =>
+                      value == null || value.isEmpty ? 'Required' : null,
+                ),
+              ],
             ),
             const SizedBox(height: 20),
             NavigationButtons(onBack: null, onNext: onNext, isFirstTab: true),
