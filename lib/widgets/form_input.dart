@@ -1,26 +1,25 @@
-// form_input.dart
 import 'package:flutter/material.dart';
 
 class FormInput extends StatelessWidget {
   final String label;
-  final String? hintText;
+  final String hintText;
   final TextEditingController controller;
-  final String? Function(String?)? validator;
-  final int maxLines;
+  final FormFieldValidator<String>? validator;
+  final TextInputType keyboardType;
   final bool obscureText;
+  final int maxLines;
   final Widget? suffixIcon;
-  final TextInputType? keyboardType;
 
   const FormInput({
     super.key,
     required this.label,
-    this.hintText,
     required this.controller,
+    this.hintText = '',
     this.validator,
-    this.maxLines = 1,
+    this.keyboardType = TextInputType.text,
     this.obscureText = false,
+    this.maxLines = 1,
     this.suffixIcon,
-    this.keyboardType,
   });
 
   @override
@@ -28,36 +27,27 @@ class FormInput extends StatelessWidget {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Text(label, style: const TextStyle(fontWeight: FontWeight.w500)),
-        const SizedBox(height: 4),
-        Container(
-          decoration: BoxDecoration(
-            color: Colors.white,
-            borderRadius: BorderRadius.circular(12),
-            boxShadow: [
-              BoxShadow(
-                color: Colors.grey.withOpacity(0.1),
-                blurRadius: 4,
-                offset: const Offset(0, 2),
-              ),
-            ],
-          ),
-          child: TextFormField(
-            controller: controller,
-            validator: validator,
-            maxLines: maxLines,
-            obscureText: obscureText,
-            keyboardType: keyboardType,
-            decoration: InputDecoration(
-              hintText: hintText,
-              border: OutlineInputBorder(
-                borderRadius: BorderRadius.circular(12),
-              ),
-              filled: true,
-              fillColor: Colors.white,
-              suffixIcon: suffixIcon,
+        Text(
+          label,
+          style: const TextStyle(fontWeight: FontWeight.w700, fontSize: 15),
+        ),
+        const SizedBox(height: 6),
+        TextFormField(
+          controller: controller,
+          keyboardType: keyboardType,
+          obscureText: obscureText,
+          maxLines: maxLines,
+          decoration: InputDecoration(
+            hintText: hintText,
+            filled: true,
+            fillColor: Colors.grey[200],
+            suffixIcon: suffixIcon,
+            border: OutlineInputBorder(
+              borderRadius: BorderRadius.circular(12),
+              borderSide: BorderSide.none,
             ),
           ),
+          validator: validator,
         ),
       ],
     );

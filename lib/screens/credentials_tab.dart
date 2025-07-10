@@ -32,58 +32,58 @@ class _CredentialsTabState extends State<CredentialsTab> {
 
   @override
   Widget build(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.only(left: 40, right: 40, top: 10, bottom: 40),
-      child: Form(
-        key: widget.formKey,
-        child: ListView(
-          children: [
-            const SizedBox(height: 10),
-            const Text(
-              'Email & Password',
-              style: TextStyle(fontWeight: FontWeight.bold, fontSize: 22),
+    return Scaffold(
+      body: SafeArea(
+        child: SingleChildScrollView(
+          padding: const EdgeInsets.symmetric(horizontal: 40),
+          child: Form(
+            key: widget.formKey,
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                const SizedBox(height: 10),
+                const Text(
+                  'Email & Password',
+                  style: TextStyle(fontWeight: FontWeight.bold, fontSize: 22),
+                ),
+                const Text(
+                  'Login information.',
+                  style: TextStyle(color: Colors.grey, fontSize: 14),
+                ),
+                const SizedBox(height: 40),
+                EmailInputField(controller: widget.emailController),
+                const SizedBox(height: 12),
+                PasswordInputField(
+                  controller: widget.passwordController,
+                  obscureText: _obscurePassword,
+                  toggleVisibility: () {
+                    setState(() {
+                      _obscurePassword = !_obscurePassword;
+                    });
+                  },
+                ),
+                const SizedBox(height: 12),
+                ConfirmPasswordInputField(
+                  controller: widget.confirmPasswordController,
+                  originalPassword: widget.passwordController.text,
+                  obscureText: _obscureConfirmPassword,
+                  toggleVisibility: () {
+                    setState(() {
+                      _obscureConfirmPassword = !_obscureConfirmPassword;
+                    });
+                  },
+                ),
+              ],
             ),
-            const Text(
-              'Login information.',
-              style: TextStyle(color: Colors.grey, fontSize: 14),
-            ),
-            const SizedBox(height: 40),
-
-            // Email Input
-            EmailInputField(controller: widget.emailController),
-            const SizedBox(height: 12),
-
-            // Password Input
-            PasswordInputField(
-              controller: widget.passwordController, // FIXED NAME
-              obscureText: _obscurePassword,
-              toggleVisibility: () {
-                setState(() {
-                  _obscurePassword = !_obscurePassword;
-                });
-              },
-            ),
-            const SizedBox(height: 12),
-
-            // Confirm Password Input
-            ConfirmPasswordInputField(
-              controller: widget.confirmPasswordController, // FIXED NAME
-              passwordController: widget.passwordController, // FIXED NAME
-              obscureText: _obscureConfirmPassword,
-              toggleVisibility: () {
-                setState(() {
-                  _obscureConfirmPassword = !_obscureConfirmPassword;
-                });
-              },
-            ),
-            const SizedBox(height: 20),
-
-            NavigationButtons(
-              onBack: widget.onBack,
-              onNext: widget.onNext,
-              isFirstTab: false,
-            ),
-          ],
+          ),
+        ),
+      ),
+      bottomNavigationBar: Padding(
+        padding: const EdgeInsets.symmetric(horizontal: 40, vertical: 20),
+        child: NavigationButtons(
+          onBack: widget.onBack,
+          onNext: widget.onNext,
+          isFirstTab: false,
         ),
       ),
     );

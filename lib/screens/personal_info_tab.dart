@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import '../widgets/navigation_buttons.dart';
 import '../widgets/section_header.dart';
 import '../widgets/form_fields/labeled_input_field.dart';
-import '../widgets/form_fields/birthdate_with_age_field.dart'; // ← NEW
 
 class PersonalInfoTab extends StatefulWidget {
   final GlobalKey<FormState> formKey;
@@ -31,54 +30,127 @@ class PersonalInfoTab extends StatefulWidget {
 class _PersonalInfoTabState extends State<PersonalInfoTab> {
   @override
   Widget build(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.only(left: 40, right: 40, top: 10, bottom: 40),
-      child: Form(
-        key: widget.formKey,
-        child: ListView(
-          children: [
-            const SizedBox(height: 10),
-            const SectionHeader(
-              title: 'Personal Information',
-              subtitle:
-                  'Input your personal information. All fields are required.',
+    return Scaffold(
+      body: SafeArea(
+        child: SingleChildScrollView(
+          padding: const EdgeInsets.symmetric(horizontal: 40, vertical: 20),
+          child: Form(
+            key: widget.formKey,
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              mainAxisSize: MainAxisSize.min, // prevent flex errors
+              children: [
+                const SectionHeader(
+                  title: 'Personal Information',
+                  subtitle:
+                      'Input your personal information. All fields are required.',
+                ),
+                const SizedBox(height: 20),
+                LabeledInputField(
+                  label: 'First Name',
+                  controller: widget.firstNameController,
+                  hint: 'Enter first name',
+                ),
+                const SizedBox(height: 12),
+                LabeledInputField(
+                  label: 'Last Name',
+                  controller: widget.lastNameController,
+                  hint: 'Enter last name',
+                ),
+                const SizedBox(height: 12),
+                Row(
+                  children: [
+                    Expanded(
+                      flex: 2,
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          const Text(
+                            'Birthdate',
+                            style: TextStyle(
+                              fontWeight: FontWeight.w700,
+                              fontSize: 15,
+                            ),
+                          ),
+                          const SizedBox(height: 6),
+                          GestureDetector(
+                            onTap: () async {
+                              DateTime? pickedDate = await showDatePicker(
+                                context: context,
+                                initialDate: DateTime(2000, 1, 1),
+                                firstDate: DateTime(1900),
+                                lastDate: DateTime.now(),
+                              );
+                              if (pickedDate != null) {
+                                String formattedDate =
+                                    '${pickedDate.month.toString().padLeft(2, '0')}/${pickedDate.day.toString().padLeft(2, '0')}/${pickedDate.year}';
+                                widget.birthdateController.text = formattedDate;
+                                DateTime today = DateTime.now();
+                                int age = today.year - pickedDate.year;
+                                if (today.month < pickedDate.month ||
+                                    (today.month == pickedDate.month &&
+                                        today.day < pickedDate.day)) {
+                                  age--;
+                                }
+                                widget.ageController.text = age.toString();
+                              }
+                            },
+                            child: AbsorbPointer(
+                              child: TextFormField(
+                                controller: widget.birthdateController,
+                                decoration: InputDecoration(
+                                  hintText: 'mm/dd/yyyy',
+                                  filled: true,
+                                  fillColor: const Color.fromARGB(
+                                    255,
+                                    233,
+                                    229,
+                                    229,
+                                  ),
+                                  border: OutlineInputBorder(
+                                    borderRadius: BorderRadius.circular(12),
+                                    borderSide: BorderSide.none,
+                                  ),
+                                ),
+                                validator: (value) =>
+                                    value == null || value.isEmpty
+                                    ? 'Required'
+                                    : null,
+                              ),
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                    const SizedBox(width: 10),
+                    Expanded(
+                      child: LabeledInputField(
+                        label: 'Age',
+                        controller: widget.ageController,
+                        hint: '00',
+                        inputType: TextInputType.number,
+                      ),
+                    ),
+                  ],
+                ),
+                const SizedBox(height: 12),
+                LabeledInputField(
+                  label: 'Bio – Describe yourself',
+                  controller: widget.bioController,
+                  hint: 'Tell us something about yourself...',
+                  maxLines: 3,
+                ),
+              ],
             ),
-            const SizedBox(height: 20),
-
-            LabeledInputField(
-              label: 'First Name',
-              controller: widget.firstNameController,
-              hint: 'Enter first name',
-            ),
-            const SizedBox(height: 12),
-
-            LabeledInputField(
-              label: 'Last Name',
-              controller: widget.lastNameController,
-              hint: 'Enter last name',
-            ),
-            const SizedBox(height: 12),
-
-            BirthdateWithAgeField(
-              birthdateController: widget.birthdateController,
-              ageController: widget.ageController,
-            ),
-            const SizedBox(height: 12),
-
-            LabeledInputField(
-              label: 'Bio – Describe yourself',
-              controller: widget.bioController,
-              hint: 'Tell us something about yourself...',
-              maxLines: 3,
-            ),
-
-            const SizedBox(height: 20),
-            NavigationButtons(
-              onBack: null,
-              onNext: widget.onNext,
-              isFirstTab: true,
-            ),
-          ],
+          ),
+        ),
+      ),
+      bottomNavigationBar: Padding(
+        padding: const EdgeInsets.symmetric(horizontal: 40, vertical: 20),
+        child: NavigationButtons(
+          onBack: null,
+          onNext: widget.onNext,
+          isFirstTab: true,
         ),
       ),
     );

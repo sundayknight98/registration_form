@@ -2,14 +2,14 @@ import 'package:flutter/material.dart';
 
 class ConfirmPasswordInputField extends StatelessWidget {
   final TextEditingController controller;
-  final TextEditingController passwordController;
+  final String originalPassword;
   final bool obscureText;
   final VoidCallback toggleVisibility;
 
   const ConfirmPasswordInputField({
     super.key,
     required this.controller,
-    required this.passwordController,
+    required this.originalPassword,
     required this.obscureText,
     required this.toggleVisibility,
   });
@@ -44,7 +44,7 @@ class ConfirmPasswordInputField extends StatelessWidget {
             if (value == null || value.isEmpty) {
               return 'Please confirm your password';
             }
-            if (value != passwordController.text) {
+            if (value != originalPassword) {
               return 'Passwords do not match';
             }
             return null;
