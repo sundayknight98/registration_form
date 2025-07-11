@@ -8,9 +8,7 @@ class ReviewTab extends StatelessWidget {
   final String age;
   final String bio;
   final String email;
-  final String password;
   final VoidCallback onBack;
-  final VoidCallback onSubmit;
 
   const ReviewTab({
     super.key,
@@ -20,9 +18,7 @@ class ReviewTab extends StatelessWidget {
     required this.age,
     required this.bio,
     required this.email,
-    required this.password,
     required this.onBack,
-    required this.onSubmit,
   });
 
   Widget _buildInfoRow(String title, String value) {
@@ -100,8 +96,24 @@ class ReviewTab extends StatelessWidget {
         padding: const EdgeInsets.symmetric(horizontal: 40, vertical: 20),
         child: NavigationButtons(
           onBack: onBack,
-          onNext: onSubmit,
-          isFirstTab: false,
+          onNext: () {
+            final jsonData = {
+              "firstName": firstName,
+              "lastName": lastName,
+              "birthdate": birthdate,
+              "age": age,
+              "bio": bio,
+              "email": email,
+            };
+
+            print('User Data as JSON:');
+            print(jsonData);
+
+            ScaffoldMessenger.of(context).showSnackBar(
+              const SnackBar(content: Text('Data submitted successfully!')),
+            );
+          },
+          nextLabel: 'Continue',
         ),
       ),
     );

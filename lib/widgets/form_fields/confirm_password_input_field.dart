@@ -1,19 +1,25 @@
 import 'package:flutter/material.dart';
 
-class ConfirmPasswordInputField extends StatelessWidget {
+class ConfirmPasswordInputField extends StatefulWidget {
   final TextEditingController controller;
-  final String originalPassword;
+  final TextEditingController originalPasswordController;
   final bool obscureText;
   final VoidCallback toggleVisibility;
 
   const ConfirmPasswordInputField({
     super.key,
     required this.controller,
-    required this.originalPassword,
+    required this.originalPasswordController,
     required this.obscureText,
     required this.toggleVisibility,
   });
 
+  @override
+  State<ConfirmPasswordInputField> createState() =>
+      _ConfirmPasswordInputFieldState();
+}
+
+class _ConfirmPasswordInputFieldState extends State<ConfirmPasswordInputField> {
   @override
   Widget build(BuildContext context) {
     return Column(
@@ -25,8 +31,8 @@ class ConfirmPasswordInputField extends StatelessWidget {
         ),
         const SizedBox(height: 6),
         TextFormField(
-          controller: controller,
-          obscureText: obscureText,
+          controller: widget.controller,
+          obscureText: widget.obscureText,
           decoration: InputDecoration(
             hintText: '********',
             filled: true,
@@ -36,15 +42,17 @@ class ConfirmPasswordInputField extends StatelessWidget {
               borderSide: BorderSide.none,
             ),
             suffixIcon: IconButton(
-              icon: Icon(obscureText ? Icons.visibility_off : Icons.visibility),
-              onPressed: toggleVisibility,
+              icon: Icon(
+                widget.obscureText ? Icons.visibility_off : Icons.visibility,
+              ),
+              onPressed: widget.toggleVisibility,
             ),
           ),
           validator: (value) {
             if (value == null || value.isEmpty) {
               return 'Please confirm your password';
             }
-            if (value != originalPassword) {
+            if (value != widget.originalPasswordController.text) {
               return 'Passwords do not match';
             }
             return null;

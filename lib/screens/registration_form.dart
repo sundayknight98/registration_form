@@ -11,133 +11,98 @@ class RegistrationForm extends StatefulWidget {
 }
 
 class _RegistrationFormState extends State<RegistrationForm> {
-  int _currentStep = 0;
+  int _currentTabIndex = 0;
 
-  final _formKey1 = GlobalKey<FormState>();
-  final _formKey2 = GlobalKey<FormState>();
+  // Controllers
+  final _personalInfoFormKey = GlobalKey<FormState>();
+  final _credentialsFormKey = GlobalKey<FormState>();
 
-  final _firstNameController = TextEditingController();
-  final _lastNameController = TextEditingController();
-  final _birthdateController = TextEditingController();
-  final _ageController = TextEditingController();
-  final _bioController = TextEditingController();
-  final _emailController = TextEditingController();
-  final _passwordController = TextEditingController();
-  final _confirmPasswordController = TextEditingController();
+  final TextEditingController firstNameController = TextEditingController();
+  final TextEditingController lastNameController = TextEditingController();
+  final TextEditingController birthdateController = TextEditingController();
+  final TextEditingController ageController = TextEditingController();
+  final TextEditingController bioController = TextEditingController();
+  final TextEditingController emailController = TextEditingController();
+  final TextEditingController passwordController = TextEditingController();
+  final TextEditingController confirmPasswordController =
+      TextEditingController();
 
-  void _nextStep() {
-    if (_currentStep == 0 && !_formKey1.currentState!.validate()) return;
-    if (_currentStep == 1 && !_formKey2.currentState!.validate()) return;
-
-    if (_currentStep < 2) {
-      setState(() => _currentStep++);
+  void _goToNextTab() {
+    if (_currentTabIndex == 0 &&
+        _personalInfoFormKey.currentState!.validate()) {
+      setState(() => _currentTabIndex = 1);
+    } else if (_currentTabIndex == 1 &&
+        _credentialsFormKey.currentState!.validate()) {
+      setState(() => _currentTabIndex = 2);
     }
   }
 
-  void _backStep() {
-    if (_currentStep > 0) {
-      setState(() => _currentStep--);
+  void _goToPreviousTab() {
+    if (_currentTabIndex > 0) {
+      setState(() => _currentTabIndex--);
     }
-  }
-
-  void _submitForm() {
-    showDialog(
-      context: context,
-      builder: (_) => AlertDialog(
-        title: const Text('Registration Submitted'),
-        content: const Text(
-          'Your information has been submitted successfully.',
-        ),
-        actions: [
-          TextButton(
-            onPressed: () => Navigator.pop(context),
-            child: const Text('OK'),
-          ),
-        ],
-      ),
-    );
-  }
-
-  Widget _buildProgressIndicator() {
-    return Column(
-      children: [
-        const Text("Registration", style: TextStyle(fontSize: 14)),
-        const SizedBox(height: 20),
-        Container(
-          height: 2,
-          color: Colors.grey.shade300,
-          width: double.infinity,
-        ),
-        const SizedBox(height: 20),
-        Center(
-          child: Text(
-            "${_currentStep + 1} out of 3",
-            style: const TextStyle(
-              fontSize: 14,
-              fontWeight: FontWeight.w500,
-              color: Colors.grey,
-            ),
-          ),
-        ),
-        const SizedBox(height: 10),
-      ],
-    );
   }
 
   @override
   Widget build(BuildContext context) {
     Widget currentTab;
 
-    switch (_currentStep) {
+    switch (_currentTabIndex) {
       case 0:
         currentTab = PersonalInfoTab(
-          formKey: _formKey1,
-          firstNameController: _firstNameController,
-          lastNameController: _lastNameController,
-          birthdateController: _birthdateController,
-          ageController: _ageController,
-          bioController: _bioController,
-          onNext: _nextStep,
+          formKey: _personalInfoFormKey,
+          firstNameController: firstNameController,
+          lastNameController: lastNameController,
+          birthdateController: birthdateController,
+          ageController: ageController,
+          bioController: bioController,
+          onNext: _goToNextTab,
         );
         break;
+
       case 1:
         currentTab = CredentialsTab(
-          formKey: _formKey2,
-          emailController: _emailController,
-          passwordController: _passwordController,
-          confirmPasswordController: _confirmPasswordController,
-          onBack: _backStep,
-          onNext: _nextStep,
+          formKey: _credentialsFormKey,
+          emailController: emailController,
+          passwordController: passwordController,
+          confirmPasswordController: confirmPasswordController,
+          onNext: _goToNextTab,
+          onBack: _goToPreviousTab,
         );
         break;
+
       case 2:
         currentTab = ReviewTab(
-          firstName: _firstNameController.text,
-          lastName: _lastNameController.text,
-          birthdate: _birthdateController.text,
-          age: _ageController.text,
-          bio: _bioController.text,
-          email: _emailController.text,
-          password: _passwordController.text,
-          onBack: _backStep,
-          onSubmit: _submitForm,
+          firstName: firstNameController.text,
+          lastName: lastNameController.text,
+          birthdate: birthdateController.text,
+          age: ageController.text,
+          bio: bioController.text,
+          email: emailController.text,
+          onBack: _goToPreviousTab,
         );
         break;
+
       default:
-        currentTab = const SizedBox();
+        currentTab = const Center(child: Text("Unknown tab"));
     }
 
     return Scaffold(
-      body: SafeArea(
-        child: Column(
-          children: [
-            const SizedBox(height: 16),
-            _buildProgressIndicator(),
-            const SizedBox(height: 4),
-            Expanded(child: currentTab),
-          ],
-        ),
-      ),
+      appBar: AppBar(title: const Text('Registration Form'), centerTitle: true),
+      body: currentTab,
     );
+  }
+
+  @override
+  void dispose() {
+    firstNameController.dispose();
+    lastNameController.dispose();
+    birthdateController.dispose();
+    ageController.dispose();
+    bioController.dispose();
+    emailController.dispose();
+    passwordController.dispose();
+    confirmPasswordController.dispose();
+    super.dispose();
   }
 }

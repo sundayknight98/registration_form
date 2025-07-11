@@ -4,12 +4,13 @@ class NavigationButtons extends StatelessWidget {
   final VoidCallback? onBack;
   final VoidCallback onNext;
   final bool isFirstTab;
-
+  final String nextLabel;
   const NavigationButtons({
     super.key,
     this.onBack,
     required this.onNext,
     this.isFirstTab = false,
+    this.nextLabel = 'Next',
   });
 
   @override
@@ -19,6 +20,7 @@ class NavigationButtons extends StatelessWidget {
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
+          // Show "Back" button only if not first tab
           if (!isFirstTab)
             Expanded(
               child: ElevatedButton(
@@ -35,6 +37,8 @@ class NavigationButtons extends StatelessWidget {
               ),
             ),
           if (!isFirstTab) const SizedBox(width: 10),
+
+          // "Next" or "Continue" button
           Expanded(
             child: ElevatedButton(
               onPressed: onNext,
@@ -46,7 +50,7 @@ class NavigationButtons extends StatelessWidget {
                   borderRadius: BorderRadius.circular(30),
                 ),
               ),
-              child: const Text('Next'),
+              child: Text(nextLabel),
             ),
           ),
         ],

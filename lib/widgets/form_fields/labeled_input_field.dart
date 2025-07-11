@@ -1,19 +1,22 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart'; // Required for input formatters
 
 class LabeledInputField extends StatelessWidget {
   final String label;
+  final String hint;
   final TextEditingController controller;
-  final String? hint;
   final int maxLines;
   final TextInputType inputType;
+  final List<TextInputFormatter>? inputFormatters; // <-- Added support
 
   const LabeledInputField({
     super.key,
     required this.label,
+    required this.hint,
     required this.controller,
-    this.hint,
     this.maxLines = 1,
     this.inputType = TextInputType.text,
+    this.inputFormatters,
   });
 
   @override
@@ -28,8 +31,9 @@ class LabeledInputField extends StatelessWidget {
         const SizedBox(height: 6),
         TextFormField(
           controller: controller,
-          maxLines: maxLines,
           keyboardType: inputType,
+          maxLines: maxLines,
+          inputFormatters: inputFormatters, // <-- Applied here
           decoration: InputDecoration(
             hintText: hint,
             filled: true,

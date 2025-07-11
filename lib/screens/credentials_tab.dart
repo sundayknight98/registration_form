@@ -29,6 +29,29 @@ class CredentialsTab extends StatefulWidget {
 class _CredentialsTabState extends State<CredentialsTab> {
   bool _obscurePassword = true;
   bool _obscureConfirmPassword = true;
+  bool _passwordsMatch = true;
+
+  @override
+  void initState() {
+    super.initState();
+    widget.passwordController.addListener(_checkPasswordsMatch);
+    widget.confirmPasswordController.addListener(_checkPasswordsMatch);
+  }
+
+  void _checkPasswordsMatch() {
+    final password = widget.passwordController.text;
+    final confirm = widget.confirmPasswordController.text;
+    setState(() {
+      _passwordsMatch = password.isNotEmpty && password == confirm;
+    });
+  }
+
+  @override
+  void dispose() {
+    widget.passwordController.removeListener(_checkPasswordsMatch);
+    widget.confirmPasswordController.removeListener(_checkPasswordsMatch);
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -65,7 +88,7 @@ class _CredentialsTabState extends State<CredentialsTab> {
                 const SizedBox(height: 12),
                 ConfirmPasswordInputField(
                   controller: widget.confirmPasswordController,
-                  originalPassword: widget.passwordController.text,
+                  originalPasswordController: widget.passwordController,
                   obscureText: _obscureConfirmPassword,
                   toggleVisibility: () {
                     setState(() {
@@ -73,6 +96,21 @@ class _CredentialsTabState extends State<CredentialsTab> {
                     });
                   },
                 ),
+                if (_passwordsMatch &&
+                    widget.confirmPasswordController.text.isNotEmpty)
+                  Padding(
+                    padding: const EdgeInsets.only(top: 4, left: 2),
+                    child: Row(
+                      children: const [
+                        Icon(Icons.check_circle, color: Colors.green, size: 18),
+                        SizedBox(width: 6),
+                        Text(
+                          "Passwords match",
+                          style: TextStyle(color: Colors.green),
+                        ),
+                      ],
+                    ),
+                  ),
               ],
             ),
           ),

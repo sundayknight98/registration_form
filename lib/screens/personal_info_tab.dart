@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import '../widgets/navigation_buttons.dart';
 import '../widgets/section_header.dart';
 import '../widgets/form_fields/labeled_input_field.dart';
+import 'package:flutter/services.dart';
 
 class PersonalInfoTab extends StatefulWidget {
   final GlobalKey<FormState> formKey;
@@ -33,12 +34,12 @@ class _PersonalInfoTabState extends State<PersonalInfoTab> {
     return Scaffold(
       body: SafeArea(
         child: SingleChildScrollView(
-          padding: const EdgeInsets.symmetric(horizontal: 40, vertical: 20),
+          padding: const EdgeInsets.symmetric(horizontal: 40, vertical: 10),
           child: Form(
             key: widget.formKey,
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
-              mainAxisSize: MainAxisSize.min, // prevent flex errors
+              mainAxisSize: MainAxisSize.min,
               children: [
                 const SectionHeader(
                   title: 'Personal Information',
@@ -129,6 +130,10 @@ class _PersonalInfoTabState extends State<PersonalInfoTab> {
                         controller: widget.ageController,
                         hint: '00',
                         inputType: TextInputType.number,
+                        inputFormatters: [
+                          LengthLimitingTextInputFormatter(2),
+                          FilteringTextInputFormatter.digitsOnly,
+                        ],
                       ),
                     ),
                   ],
@@ -138,7 +143,7 @@ class _PersonalInfoTabState extends State<PersonalInfoTab> {
                   label: 'Bio – Describe yourself',
                   controller: widget.bioController,
                   hint: 'Tell us something about yourself...',
-                  maxLines: 3,
+                  maxLines: 5,
                 ),
               ],
             ),
