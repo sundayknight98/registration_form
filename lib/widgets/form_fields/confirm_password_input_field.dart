@@ -1,10 +1,11 @@
 import 'package:flutter/material.dart';
 
-class ConfirmPasswordInputField extends StatefulWidget {
+class ConfirmPasswordInputField extends StatelessWidget {
   final TextEditingController controller;
   final TextEditingController originalPasswordController;
   final bool obscureText;
   final VoidCallback toggleVisibility;
+  final String? Function(String?)? validator;
 
   const ConfirmPasswordInputField({
     super.key,
@@ -12,14 +13,9 @@ class ConfirmPasswordInputField extends StatefulWidget {
     required this.originalPasswordController,
     required this.obscureText,
     required this.toggleVisibility,
+    this.validator,
   });
 
-  @override
-  State<ConfirmPasswordInputField> createState() =>
-      _ConfirmPasswordInputFieldState();
-}
-
-class _ConfirmPasswordInputFieldState extends State<ConfirmPasswordInputField> {
   @override
   Widget build(BuildContext context) {
     return Column(
@@ -31,8 +27,9 @@ class _ConfirmPasswordInputFieldState extends State<ConfirmPasswordInputField> {
         ),
         const SizedBox(height: 6),
         TextFormField(
-          controller: widget.controller,
-          obscureText: widget.obscureText,
+          controller: controller,
+          obscureText: obscureText,
+          validator: validator,
           decoration: InputDecoration(
             hintText: '********',
             filled: true,
@@ -42,21 +39,10 @@ class _ConfirmPasswordInputFieldState extends State<ConfirmPasswordInputField> {
               borderSide: BorderSide.none,
             ),
             suffixIcon: IconButton(
-              icon: Icon(
-                widget.obscureText ? Icons.visibility_off : Icons.visibility,
-              ),
-              onPressed: widget.toggleVisibility,
+              icon: Icon(obscureText ? Icons.visibility_off : Icons.visibility),
+              onPressed: toggleVisibility,
             ),
           ),
-          validator: (value) {
-            if (value == null || value.isEmpty) {
-              return 'Please confirm your password';
-            }
-            if (value != widget.originalPasswordController.text) {
-              return 'Passwords do not match';
-            }
-            return null;
-          },
         ),
       ],
     );

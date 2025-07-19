@@ -48,49 +48,72 @@ class ReviewTab extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: SafeArea(
-        child: SingleChildScrollView(
-          padding: const EdgeInsets.symmetric(horizontal: 40),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              const SizedBox(height: 10),
-              const Text(
-                'Review Information',
-                style: TextStyle(fontWeight: FontWeight.bold, fontSize: 22),
+      body: Column(
+        children: [
+          const Divider(thickness: 1, height: 32, color: Colors.grey),
+          const Center(
+            child: Text(
+              '3 out of 3',
+              style: TextStyle(
+                fontSize: 16,
+                fontWeight: FontWeight.bold,
+                color: Colors.grey,
               ),
-              const Text(
-                'Please review all your information before you continue.',
-                style: TextStyle(
-                  color: Color.fromARGB(255, 163, 160, 160),
-                  fontSize: 14,
-                ),
-              ),
-              const SizedBox(height: 22),
-              _buildInfoRow("First Name", firstName),
-              _buildInfoRow("Last Name", lastName),
-              _buildInfoRow("Birthdate", birthdate),
-              _buildInfoRow("Age", age),
-              _buildInfoRow("Email", email),
-              const SizedBox(height: 30),
-              Padding(
-                padding: const EdgeInsets.only(bottom: 12),
-                child: RichText(
-                  text: TextSpan(
-                    style: const TextStyle(fontSize: 16, color: Colors.black),
-                    children: [
-                      const TextSpan(
-                        text: 'Bio - Describe yourself: ',
-                        style: TextStyle(fontWeight: FontWeight.bold),
-                      ),
-                      TextSpan(text: bio.isEmpty ? 'N/A' : bio),
-                    ],
-                  ),
-                ),
-              ),
-            ],
+            ),
           ),
-        ),
+          Expanded(
+            child: SafeArea(
+              child: SingleChildScrollView(
+                padding: const EdgeInsets.symmetric(horizontal: 40),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    const SizedBox(height: 10),
+                    const Text(
+                      'Review Information',
+                      style: TextStyle(
+                        fontWeight: FontWeight.bold,
+                        fontSize: 22,
+                      ),
+                    ),
+                    const Text(
+                      'Please review all your information before you continue.',
+                      style: TextStyle(
+                        color: Color.fromARGB(255, 163, 160, 160),
+                        fontSize: 14,
+                      ),
+                    ),
+                    const SizedBox(height: 22),
+                    _buildInfoRow("First Name", firstName),
+                    _buildInfoRow("Last Name", lastName),
+                    _buildInfoRow("Birthdate", birthdate),
+                    _buildInfoRow("Age", age),
+                    _buildInfoRow("Email", email),
+                    const SizedBox(height: 30),
+                    Padding(
+                      padding: const EdgeInsets.only(bottom: 12),
+                      child: RichText(
+                        text: TextSpan(
+                          style: const TextStyle(
+                            fontSize: 16,
+                            color: Colors.black,
+                          ),
+                          children: [
+                            const TextSpan(
+                              text: 'Bio - Describe yourself: ',
+                              style: TextStyle(fontWeight: FontWeight.bold),
+                            ),
+                            TextSpan(text: bio.isEmpty ? 'N/A' : bio),
+                          ],
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            ),
+          ),
+        ],
       ),
       bottomNavigationBar: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 40, vertical: 20),

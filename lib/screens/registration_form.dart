@@ -88,7 +88,7 @@ class _RegistrationFormState extends State<RegistrationForm> {
     }
 
     return Scaffold(
-      appBar: AppBar(title: const Text('Registration Form'), centerTitle: true),
+      appBar: AppBar(title: const Text('Registration'), centerTitle: true),
       body: currentTab,
     );
   }

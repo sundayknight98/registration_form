@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart'; // Required for input formatters
+import 'package:flutter/services.dart';
 
 class LabeledInputField extends StatelessWidget {
   final String label;
@@ -7,7 +7,7 @@ class LabeledInputField extends StatelessWidget {
   final TextEditingController controller;
   final int maxLines;
   final TextInputType inputType;
-  final List<TextInputFormatter>? inputFormatters; // <-- Added support
+  final List<TextInputFormatter>? inputFormatters;
 
   const LabeledInputField({
     super.key,
